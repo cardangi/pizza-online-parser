@@ -1,5 +1,3 @@
-#laptop git test
-
 #!/usr/bin/python
 
 import requests
@@ -8,21 +6,24 @@ DEBUG = 1
 
 def requester(address):
 
-	web_address = ""
+	home_address = ""
 
 	for i in range(len(address)):
-		web_address = address[i:i+1]
+		if address[i:i+1] == " ":
+			home_address = home_address + "+"
+		elif address[i:i+1] == ",":
+			home_address = home_address + "%2C"
+		else:
+			home_address = home_address + address[i:i+1]
+
+	# TODO: how to handle umlauts
+
+	response = requests.get('https://pizza-online.fi/web/find/index?search_by=address&value=' + home_address + '#search_results')
 
 	if DEBUG == 1:
-		print('### web_address == ' + web_address)
+		print(response.text)
 
-	response = requests.get('https://pizza-online.fi/web/find/index?search_by=address&value=' + web_address + '#search_results')
-
-	# j%C3%A4mer%C3%A4ntaival+1%2C+espoo
-
-	print(response.text)
-
-requester('otakaari 18, espoo')
+requester('otakaari 18 espoo')
 
 def sorter(var_restaurants):
 
